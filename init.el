@@ -1,5 +1,7 @@
 (push "/usr/local/bin" exec-path)
 
+(add-to-list 'load-path (expand-file-name "~/.emacs.d"))
+
 
 ;; Mac keyboard modifier key
 ;;(setq mac-command-modifier 'meta)
@@ -21,7 +23,7 @@
 (delete-selection-mode t)
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
-(blink-cursor-mode t)
+(blink-cursor-mode -1)
 (show-paren-mode t)
 (column-number-mode t)
 (set-fringe-style -1)
@@ -29,6 +31,7 @@
 (setq frame-title-format "emacs@%b")
 (windmove-default-keybindings)
 (desktop-save-mode 1)
+(ns-toggle-fullscreen)
 (server-start)
 
 ;; Font
@@ -45,14 +48,30 @@
 (add-to-list 'custom-theme-load-path 
              "~/.emacs.d/themes/zenburn")
 
-(load-theme 'solarized-light t)
-;;(load-theme 'solarized-dark t) ;; solarized dark theme 
+;; (load-theme 'solarized-light t)
+(load-theme 'solarized-dark t) ;; solarized dark theme 
 ;;(load-theme 'tango' t)
 ;;(load-theme 'zenburn' t)
 
 
-;; Hook
+;; Utils
 
+(defun end-of-line-newline ()
+  "function like vim 'o' key"
+  (interactive)
+  (move-end-of-line 1)
+  (newline)
+)
+
+(defun move-up-five-line ()
+  (interactive)
+  (previous-line 5)
+)
+
+(defun move-down-five-line ()
+  (interactive)
+  (next-line 5)
+)
 
 
 ;; Key Binding
@@ -63,6 +82,12 @@
 (global-set-key (kbd "C-]") 'textmate-shift-right)
 (global-set-key (kbd "M-;") 'comment-or-uncomment-region-or-line)
 (global-set-key (kbd "<f5>") 'ruby-compilation-this-buffer)
+(global-set-key (kbd "M-1") 'set-mark-command)
+
+;; Utils Binding
+(global-set-key (kbd "M-RET") 'end-of-line-newline)
+(global-set-key (kbd "M-p") 'move-up-five-line)
+(global-set-key (kbd "M-n") 'move-down-five-line)
 
 (global-set-key [kp-delete] 'rinari-find-model)
 (global-set-key [end] 'rinari-find-view)
@@ -88,6 +113,8 @@
 (require 'autopair)
 (autopair-global-mode) ;; to enable in all buffers
 
+(add-to-list 'load-path "~/.emacs.d/plugins/auto-complete")
+(require 'init-auto-complete)
 
 ;; Rinari
 (add-to-list 'load-path "~/.emacs.d/plugins/rinari")
@@ -170,3 +197,25 @@
 
 ;; FIXME
 
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ac-auto-start nil)
+ '(ac-dwim nil)
+ '(css-indent-offset 2)
+ '(eol-mnemonic-mac "(Mac)")
+ '(js2-basic-offset 2)
+ '(js2-cleanup-whitespace t)
+ '(make-backup-files nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ac-candidate-face ((t (:background "White" :foreground "black" :weight thin))))
+ '(ac-selection-face ((t (:background "Magenta" :foreground "white" :weight extra-bold))))
+ '(hl-line ((t (:inherit highlight :background "selectedMenuItemTextColor" :inverse-video nil :underline nil :slant normal :weight normal))))
+ '(popup-face ((t (:background "selectedMenuItemTextColor" :foreground "controlDarkShadowColor"))))
+ '(popup-menu-mouse-face ((t (:background "Purple" :foreground "white")))))
